@@ -1,0 +1,181 @@
+from random import randint
+
+
+def replay():
+
+    global dinheiro
+    global pont_fases
+    global fase
+    cartas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    comp = 0
+    hum = 0
+    mao_comp = []
+    mao_hum = []
+
+    print(f"\nFichas = {dinheiro}")
+    aposta = int(input("Gostaria de apostar quantas fichas? "))
+    if aposta > dinheiro:
+        print("\nVocê não possui fichas suficientes")
+        replay()
+    else:
+        dinheiro -= aposta
+
+# cartas do computador
+
+    for _ in range(2):
+        mao = randint(0, len(cartas)-1)
+        mao_comp.append(cartas[mao])
+        comp += cartas[mao]
+    print(f"\nAs cartas da mesa são = [{mao_comp[0]}, X]")
+
+
+# cartas do humano
+
+    for _ in range(2):
+        mao = randint(0, len(cartas)-1)
+        mao_hum.append(cartas[mao])
+        hum += cartas[mao]
+    print(f"\nAs suas cartas são = {mao_hum} \n\nPontos = {hum}")
+
+# comando humano
+    while hum < 21:
+        print("----------------------------------")
+        jogar = input(
+            "1. Ficar com a mao atual\n2. Pedir mais uma carta\n3. Dobrar a \
+aposta: "
+                    )
+
+        if jogar == "2":
+            for _ in range(1):
+                mao = randint(0, len(cartas)-1)
+                mao_hum.append(cartas[mao])
+                hum += cartas[mao]
+            print(f"\nAs suas cartas sao = {mao_hum}")
+            print(f"\nPontos = {hum}")
+
+        elif jogar == "3":
+            if aposta < dinheiro:
+                for _ in range(1):
+                    dinheiro -= aposta
+                    aposta += aposta
+                    mao = randint(0, len(cartas)-1)
+                    mao_hum.append(cartas[mao])
+                    hum += cartas[mao]
+                    print(f"\nAs suas cartas sao = {mao_hum}")
+                    print(f"\nPontos = {hum}")
+                break
+            else:
+                print("\nVocê não possui fichas suficientes")
+
+        elif jogar == "1":
+            print(f"\nAs suas cartas sao = {mao_hum}")
+            print(f"Pontos = {hum}")
+            break
+
+        else:
+            print("\n Não entendi")
+
+
+# comando pc
+    print(f"\nAs cartas da mesa são = {mao_comp}")
+    while comp < 17:
+        for _ in range(1):
+            mao = randint(0, len(cartas)-1)
+            mao_comp.append(cartas[mao])
+            comp += cartas[mao]
+            print(f"\nAs cartas da mesa são = {mao_comp}")
+
+
+# Comparação de pontos
+
+    print(
+        f"\ntotalizando seus pontos = {hum} \
+\ntotalizando os pontos da mesa = {comp}"
+         )
+    if comp == hum:
+        print("\nEMPATE! \nVocê recebe suas fichas de volta.")
+        dinheiro += aposta
+
+    elif comp > 21 and hum > 21:
+        print("\nPASSOU! \nVocê recebe suas fichas de volta.")
+        dinheiro += aposta
+
+    elif comp > 21 or hum > comp and hum <= 21:
+        aposta *= 2
+        dinheiro += aposta
+        print(f"\nVocê ganhou {aposta} fichas,\
+ agora você tem {dinheiro} fichas!")
+
+    elif hum > 21 or comp > hum:
+        print(f"\nVocê perdeu {aposta} fichas,\
+ agora você tem {dinheiro} fichas!")
+
+
+# missões
+
+    if dinheiro >= pont_fases[fase]:
+        fase += 1
+        print(f"\nVocê passou de fase agora esta na {fase}")
+
+    if dinheiro >= pont_fases[10]:
+        print("\nParabens! Você completou o jogo!")
+
+    if dinheiro == 0:
+        print("\nGAME OVER!")
+        dinheiro = 50
+    else:
+        print(
+            f"\nVocê está na fase {fase} e precisa de {pont_fases[fase]}\
+ para avançar"
+            )
+
+# replay
+
+    novamente = input("\nGostaria de jogar novamente? (s/n)")
+    if novamente == "s":
+        replay()
+
+
+# bloco inicial
+def regras():
+    print(
+        "\nO objetivo é ser o maior pontuador, sem ultrapassar a pontuação de 21,\
+o que define uma derrota\
+\nAo selecionar em '1' você fica com seu jogo atual e permite que a mesa \
+realize as jogadas dela\
+\nAo selecionar '2' você pede mais uma carta\
+\nAo selecionar em '3' você dobra o valor de sua aposta e recebe apenas mais\
+uma carta mostrando assim que você está confiante de sua jogada"
+        )
+
+
+def creditos():
+    print(
+        "\nProgramado por João G. Ramos e Mauricio Daniel Zanella \
+         \nInspirado no jogo 'Fallout New Vegas' por Bethesda Softworks"
+         )
+
+
+iniciar = -1
+dinheiro = 50
+pont_fases = [50, 100, 180, 250, 340, 450, 570, 690, 800, 1000, 1500]
+fase = 1
+while (iniciar != 0):
+    print("\n  ---## BlackJack! ##---  ")
+    print("\n 1. Iniciar Jogo" "\n 2. Regras""\n 3. Créditos \n 0. Sair")
+    iniciar = int(input(""))
+
+    if iniciar == 1:
+        replay()
+
+    elif iniciar == 2:
+        regras()
+
+    elif iniciar == 3:
+        creditos()
+
+    elif iniciar == 0:
+        print("\nObrigado por jogar!")
+
+    else:
+        break

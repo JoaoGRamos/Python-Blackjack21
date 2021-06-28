@@ -150,10 +150,7 @@ uma carta mostrando assim que você está confiante de sua jogada"
 
 
 def creditos():
-    print(
-        "\nProgramado por João G. Ramos e Mauricio Daniel Zanella \
-         \nInspirado no jogo 'Fallout New Vegas' por Bethesda Softworks"
-         )
+    print("\nProgramado por João G. Ramos e Mauricio Daniel Zanella")
 
 
 iniciar = -1
